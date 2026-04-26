@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baylor Pre-Med Volunteer Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1a4a2e;
+  --green-mid: #2d6e47;
+  --green-light: #4a9e6b;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --cream: #faf7f2;
+  --cream-dark: #f0ebe0;
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --white: #ffffff;
+  --border: #ddd5c5;
+  --shadow: 0 4px 24px rgba(26,74,46,0.10);
+  --radius: 14px;
+  --blue: #2d4a8e;
+  --blue-light: #e8ecf8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+/* NAV */
+header {
+  background:var(--green); padding:0 2rem;
+  display:flex; align-items:center; justify-content:space-between;
+  height:68px; position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,0.18);
+}
+.logo { display:flex; align-items:center; gap:12px; }
+.logo-icon { width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px; }
+.logo-text { font-family:'Playfair Display',serif;color:white;font-size:1.1rem;font-weight:700; }
+.logo-text span { color:var(--gold-light); }
+.nav-links { display:flex;gap:8px;align-items:center;flex-wrap:wrap; }
+.nav-btn { padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;border:none;transition:all 0.2s; }
+.nav-btn.ghost { background:transparent;color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.25); }
+.nav-btn.ghost:hover { background:rgba(255,255,255,0.1);color:white; }
+.nav-btn.gold { background:var(--gold);color:var(--green);font-weight:600; }
+.nav-btn.gold:hover { background:var(--gold-light); }
+.nav-btn.outline-white { background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.5); }
+.nav-btn.outline-white:hover { background:rgba(255,255,255,0.1); }
+
+/* TAB BAR */
+.tab-bar { background:var(--green-mid);display:flex;gap:0;border-bottom:3px solid rgba(0,0,0,0.1); }
+.tab-btn { padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.65);background:transparent;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all 0.2s;letter-spacing:0.02em; }
+.tab-btn.active { color:white;border-bottom-color:var(--gold); }
+.tab-btn:hover { color:white; }
+
+/* HERO */
+.hero { background:linear-gradient(135deg,var(--green) 0%,var(--green-mid) 60%,#1e5c38 100%);padding:52px 2rem 44px;text-align:center;position:relative;overflow:hidden; }
+.hero::before { content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Ccircle cx='30' cy='30' r='20' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none; }
+.hero h1 { font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,3rem);color:white;font-weight:900;margin-bottom:12px;line-height:1.15; }
+.hero h1 span { color:var(--gold-light); }
+.hero p { color:rgba(255,255,255,0.78);font-size:1rem;max-width:540px;margin:0 auto 24px;line-height:1.6; }
+.hero-btns { display:flex;gap:10px;justify-content:center;flex-wrap:wrap; }
+.btn-primary { background:var(--gold);color:var(--green);padding:12px 26px;border-radius:10px;font-weight:700;font-size:0.92rem;border:none;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif; }
+.btn-primary:hover { background:var(--gold-light);transform:translateY(-1px); }
+.btn-outline { background:transparent;color:white;padding:12px 26px;border-radius:10px;font-weight:500;font-size:0.92rem;border:1.5px solid rgba(255,255,255,0.4);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif; }
+.btn-outline:hover { background:rgba(255,255,255,0.1); }
+
+/* STATS */
+.stats-bar { background:var(--cream-dark);border-bottom:1px solid var(--border);padding:12px 2rem;display:flex;justify-content:center;gap:36px;flex-wrap:wrap; }
+.stat { text-align:center; }
+.stat-num { font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--green);font-weight:700; }
+.stat-label { font-size:0.75rem;color:var(--text-muted);font-weight:500;letter-spacing:0.04em;text-transform:uppercase; }
+
+/* PAGE SECTIONS */
+.page { display:none; }
+.page.active { display:block; }
+.main { max-width:1200px;margin:0 auto;padding:32px 2rem; }
+
+/* CLINICAL TOGGLE */
+.clinical-toggle { display:flex;gap:0;background:white;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;width:fit-content; }
+.toggle-btn { padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;border:none;cursor:pointer;background:white;color:var(--text-muted);transition:all 0.2s; }
+.toggle-btn.active { background:var(--green);color:white; }
+.toggle-btn:not(.active):hover { background:var(--cream-dark); }
+
+/* FILTER BAR */
+.filter-bar { background:white;border-radius:var(--radius);padding:18px 22px;margin-bottom:24px;box-shadow:var(--shadow);display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end; }
+.filter-group { display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px; }
+.filter-group label { font-size:0.72rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em; }
+.filter-group select, .filter-group input { padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--text);background:var(--cream);outline:none;transition:border-color 0.2s;cursor:pointer; }
+.filter-group select:focus, .filter-group input:focus { border-color:var(--green-light); }
+.filter-clear { padding:9px 16px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--text-muted);cursor:pointer;transition:all 0.2s;align-self:flex-end; }
+.filter-clear:hover { border-color:var(--green);color:var(--green); }
+
+/* NICHE TAGS */
+.niche-row { display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px; }
+.niche-tag { padding:6px 14px;border-radius:30px;font-size:0.8rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-muted);transition:all 0.2s; }
+.niche-tag:hover,.niche-tag.active { background:var(--green);color:white;border-color:var(--green); }
+
+/* BILINGUAL BANNER */
+.bilingual-banner { background:linear-gradient(135deg,#1e3a6e,#2d5aa0);border-radius:var(--radius);padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow); }
+.bilingual-icon { font-size:2rem;flex-shrink:0; }
+.bilingual-text h3 { color:white;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:3px; }
+.bilingual-text p { color:rgba(255,255,255,0.78);font-size:0.85rem;line-height:1.4; }
+.bilingual-btn { margin-left:auto;padding:9px 18px;background:white;color:#1e3a6e;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;flex-shrink:0;transition:all 0.2s; }
+.bilingual-btn:hover { background:var(--cream-dark); }
+
+/* SECTION HEADER */
+.section-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:16px; }
+.section-title { font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--green);font-weight:700; }
+.result-count { font-size:0.82rem;color:var(--text-muted); }
+
+/* GRID */
+.listings-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px; }
+
+/* CARD */
+.card { background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--border);transition:transform 0.2s,box-shadow 0.2s;display:flex;flex-direction:column; }
+.card:hover { transform:translateY(-3px);box-shadow:0 8px 32px rgba(26,74,46,0.15); }
+.card-accent { height:5px; }
+.accent-clinical { background:linear-gradient(90deg,#1a4a2e,#4a9e6b); }
+.accent-nonclinical { background:linear-gradient(90deg,#c9a84c,#e8c97a); }
+.accent-research { background:linear-gradient(90deg,#2d4a8e,#6b8ee8); }
+.accent-mentalhealth { background:linear-gradient(90deg,#8e2d6b,#e86bb8); }
+.accent-community { background:linear-gradient(90deg,#6b4a1a,#c9884c); }
+.accent-event { background:linear-gradient(90deg,#c94a1a,#e87a4a); }
+
+.card-body { padding:18px 20px;flex:1;display:flex;flex-direction:column; }
+.card-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px; }
+.org-name { font-size:0.74rem;font-weight:600;color:var(--green-light);text-transform:uppercase;letter-spacing:0.06em;flex:1; }
+.card-badges { display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end; }
+.card-badge { font-size:0.68rem;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap; }
+.badge-clinical { background:#e8f4ee;color:#1a4a2e; }
+.badge-nonclinical { background:#fdf4e3;color:#7a5a10; }
+.badge-research { background:#e8ecf8;color:#2d4a8e; }
+.badge-mentalhealth { background:#f8e8f4;color:#6b1a4a; }
+.badge-community { background:#f4ede8;color:#6b3a1a; }
+.badge-bilingual { background:#e8f0ff;color:#1a3a8e; }
+.badge-event { background:#fce8e2;color:#7a2a0a; }
+
+.card-title { font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.3; }
+.card-desc { font-size:0.85rem;color:var(--text-muted);line-height:1.55;margin-bottom:12px;flex:1; }
+.card-meta { display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px; }
+.meta-item { display:flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--text-muted); }
+.card-tags { display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px; }
+.card-tag { font-size:0.7rem;padding:2px 9px;border-radius:20px;background:var(--cream-dark);color:var(--text-muted);font-weight:500; }
+
+.spots-bar { margin-bottom:13px; }
+.spots-label { display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-bottom:4px; }
+.spots-label strong { color:var(--text); }
+.progress-track { height:4px;background:var(--cream-dark);border-radius:3px;overflow:hidden; }
+.progress-fill { height:100%;border-radius:3px;background:var(--green-light);transition:width 0.3s; }
+.progress-fill.full { background:#e05252; }
+.progress-fill.almost { background:#e0a052; }
+
+.card-footer { padding:0 20px 16px; }
+.signup-btn { width:100%;padding:10px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;cursor:pointer;border:none;transition:all 0.2s; }
+.signup-btn.available { background:var(--green);color:white; }
+.signup-btn.available:hover { background:var(--green-mid); }
+.signup-btn.full { background:var(--cream-dark);color:var(--text-muted);cursor:not-allowed; }
+.signup-btn.signed-up { background:var(--cream-dark);color:var(--green);border:1.5px solid var(--green-light);cursor:default; }
+.signup-btn.event-btn { background:linear-gradient(135deg,#c94a1a,#e07040);color:white; }
+.signup-btn.event-btn:hover { opacity:0.9; }
+
+/* EVENTS SECTION */
+.events-section { margin-top:40px; }
+.events-section-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:16px; }
+.section-sub { font-size:0.83rem;color:var(--text-muted);margin-top:2px; }
+.submit-event-btn { padding:9px 18px;background:var(--gold);color:var(--green);border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s; }
+.submit-event-btn:hover { background:var(--gold-light); }
+
+/* EVENTS GRID */
+.events-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px; }
+.event-card { background:white;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;transition:transform 0.2s; }
+.event-card:hover { transform:translateY(-2px); }
+.event-date-bar { background:linear-gradient(135deg,#c94a1a,#e07040);padding:10px 18px;display:flex;align-items:center;gap:12px; }
+.event-date-big { font-family:'Playfair Display',serif;font-size:1.8rem;color:white;font-weight:900;line-height:1; }
+.event-date-info { color:rgba(255,255,255,0.9); }
+.event-date-info .month { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em; }
+.event-date-info .weekday { font-size:0.75rem;opacity:0.8; }
+.event-body { padding:16px 18px; }
+.event-org { font-size:0.72rem;font-weight:600;color:#c94a1a;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px; }
+.event-title { font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:7px;line-height:1.3; }
+.event-desc { font-size:0.83rem;color:var(--text-muted);line-height:1.5;margin-bottom:12px; }
+.event-meta { display:flex;flex-direction:column;gap:4px;margin-bottom:14px; }
+.event-meta-row { font-size:0.78rem;color:var(--text-muted); }
+.event-register-btn { width:100%;padding:9px;background:linear-gradient(135deg,#c94a1a,#e07040);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.86rem;cursor:pointer;transition:opacity 0.2s; }
+.event-register-btn:hover { opacity:0.88; }
+
+/* DIRECTORY PAGE */
+.dir-search-bar { background:white;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow);display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end; }
+.dir-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px; }
+.dir-card { background:white;border-radius:12px;border:1px solid var(--border);padding:18px 20px;box-shadow:0 2px 12px rgba(26,74,46,0.07);transition:transform 0.2s; }
+.dir-card:hover { transform:translateY(-2px); }
+.dir-card-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px; }
+.dir-card-name { font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700;color:var(--green);line-height:1.2;flex:1; }
+.dir-cat-badge { font-size:0.67rem;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--cream-dark);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;margin-left:8px; }
+.dir-detail { font-size:0.8rem;color:var(--text-muted);margin-bottom:3px;display:flex;gap:5px;align-items:flex-start; }
+.dir-detail a { color:var(--green-light);text-decoration:none; }
+.dir-detail a:hover { text-decoration:underline; }
+.dir-badges { display:flex;gap:5px;flex-wrap:wrap;margin-top:10px; }
+
+/* MODALS */
+.modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px); }
+.modal-overlay.open { display:flex; }
+.modal { background:white;border-radius:18px;padding:32px;max-width:480px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.2);position:relative;max-height:90vh;overflow-y:auto; }
+.modal-close { position:absolute;top:14px;right:14px;background:var(--cream-dark);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background 0.2s; }
+.modal-close:hover { background:var(--border); }
+.modal h2 { font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--green);margin-bottom:5px; }
+.modal-sub { font-size:0.85rem;color:var(--text-muted);margin-bottom:22px;line-height:1.5; }
+.form-group { margin-bottom:14px; }
+.form-group label { display:block;font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px; }
+.form-group input,.form-group select,.form-group textarea { width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--text);background:var(--cream);outline:none;transition:border-color 0.2s; }
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--green-light);background:white; }
+.form-group textarea { resize:vertical;min-height:75px; }
+.form-submit { width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.92rem;cursor:pointer;transition:background 0.2s;margin-top:6px; }
+.form-submit:hover { background:var(--green-mid); }
+
+/* DETAIL MODAL */
+.modal-detail-org { font-size:0.76rem;color:var(--green-light);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px; }
+.modal-detail-title { font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:700;margin-bottom:10px; }
+.modal-detail-desc { font-size:0.9rem;color:var(--text-muted);line-height:1.65;margin-bottom:18px; }
+.modal-detail-meta { display:flex;flex-direction:column;gap:7px;margin-bottom:18px;background:var(--cream);border-radius:10px;padding:13px 15px; }
+.modal-meta-row { display:flex;gap:9px;align-items:center;font-size:0.84rem;color:var(--text-muted); }
+.modal-meta-row strong { color:var(--text); }
+.modal-divider { border:none;border-top:1px solid var(--border);margin:18px 0; }
+
+.cooldown-note { background:#fff8e8;border:1px solid #e8d090;border-radius:9px;padding:9px 13px;font-size:0.8rem;color:#7a5a10;margin-bottom:14px;display:flex;gap:7px;align-items:flex-start;line-height:1.45; }
+.cancel-policy { background:#fef0ee;border:1px solid #f0b8b0;border-radius:9px;padding:9px 13px;font-size:0.8rem;color:#7a2a1a;margin-bottom:14px;line-height:1.45; }
+.redirect-note { background:#e8f4ee;border:1px solid #a0d4b8;border-radius:9px;padding:9px 13px;font-size:0.8rem;color:#1a4a2e;margin-bottom:14px;line-height:1.45; }
+
+/* TOAST */
+.toast { position:fixed;bottom:28px;right:28px;background:var(--green);color:white;padding:13px 20px;border-radius:12px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+.toast.show { transform:translateY(0);opacity:1; }
+
+/* SUCCESS */
+.success-icon { text-align:center;font-size:3.2rem;margin-bottom:9px; }
+.success-title { font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);text-align:center;margin-bottom:7px; }
+.success-sub { font-size:0.88rem;color:var(--text-muted);text-align:center;margin-bottom:22px;line-height:1.55; }
+
+.no-results { grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--text-muted); }
+.no-results-icon { font-size:2.5rem;margin-bottom:12px; }
+.no-results h3 { font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--green);margin-bottom:7px; }
+
+/* BILINGUAL SECTION HIGHLIGHT */
+.bilingual-section { margin-bottom:36px; }
+.bilingual-section-title { font-family:'Playfair Display',serif;font-size:1.1rem;color:#1e3a6e;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px; }
+.bilingual-section-sub { font-size:0.82rem;color:var(--text-muted);margin-bottom:14px; }
+
+@media(max-width:600px){
+  .listings-grid,.events-grid,.dir-grid { grid-template-columns:1fr; }
+  header { padding:0 1rem; }
+  .tab-btn { padding:10px 14px;font-size:0.8rem; }
+  .bilingual-banner { flex-direction:column;text-align:center; }
+  .bilingual-btn { margin:0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    <div class="logo-text">Baylor <span>Volunteer Hub</span></div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn ghost" onclick="openModal('listOrgModal')">List Your Org</button>
+    <button class="nav-btn outline-white" onclick="openModal('submitEventModal')">Submit an Event</button>
+    <button class="nav-btn gold" onclick="openModal('studentSignupModal')">Student Sign Up</button>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showPage('opportunities')">Opportunities</button>
+  <button class="tab-btn" onclick="showPage('events')">One-Time Events</button>
+  <button class="tab-btn" onclick="showPage('directory')">Resource Directory</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Find Your <span>Niche</span> in Medicine</h1>
+  <p>A volunteer hub built for Baylor pre-med students — especially freshmen and transfers finding their footing. Discover what you're actually passionate about.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('opps-page').scrollIntoView({behavior:'smooth'})">Browse Opportunities</button>
+    <button class="btn-outline" onclick="showPage('events')">View Upcoming Events</button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">12</div><div class="stat-label">Volunteer Opps</div></div>
+  <div class="stat"><div class="stat-num">47</div><div class="stat-label">Directory Resources</div></div>
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Upcoming Events</div></div>
+  <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Always</div></div>
+</div>
+
+<!-- ══════════ OPPORTUNITIES PAGE ══════════ -->
+<div class="page active" id="opps-page">
+<div class="main">
+
+  <!-- BILINGUAL BANNER -->
+  <div class="bilingual-banner">
+    <div class="bilingual-icon">🌎</div>
+    <div class="bilingual-text">
+      <h3>Bilingual Opportunities Available</h3>
+      <p>Several orgs serve Spanish-speaking communities. Bilingual students are especially impactful — but rarely required.</p>
+    </div>
+    <button class="bilingual-btn" onclick="filterBilingual()">View Bilingual Opps →</button>
+  </div>
+
+  <!-- CLINICAL TOGGLE + FILTERS -->
+  <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;">
+    <div class="clinical-toggle">
+      <button class="toggle-btn active" id="toggle-all" onclick="setClinical('all')">All</button>
+      <button class="toggle-btn" id="toggle-clinical" onclick="setClinical('clinical')">🩺 Clinical</button>
+      <button class="toggle-btn" id="toggle-nonclinical" onclick="setClinical('nonclinical')">🤝 Non-Clinical</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <div class="niche-tag active" id="niche-all" onclick="setNiche(this,'')">All Niches</div>
+      <div class="niche-tag" onclick="setNiche(this,'maternal')">🤱 Maternal</div>
+      <div class="niche-tag" onclick="setNiche(this,'pediatric')">👶 Pediatrics</div>
+      <div class="niche-tag" onclick="setNiche(this,'refugee')">🌍 Refugee</div>
+      <div class="niche-tag" onclick="setNiche(this,'poverty')">🏠 Poverty</div>
+      <div class="niche-tag" onclick="setNiche(this,'mentalhealth')">🧠 Mental Health</div>
+      <div class="niche-tag" onclick="setNiche(this,'elderly')">🧓 Elderly</div>
+      <div class="niche-tag" onclick="setNiche(this,'substance')">💊 Recovery</div>
+      <div class="niche-tag" onclick="setNiche(this,'bilingual')">🌎 Bilingual</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Search</label>
+      <input type="text" id="searchInput" placeholder="Search opportunities..." oninput="applyFilters()">
+    </div>
+    <div class="filter-group">
+      <label>Commitment</label>
+      <select id="commitFilter" onchange="applyFilters()">
+        <option value="">Any</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="oneoff">One-Time</option>
+      </select>
+    </div>
+    <button class="filter-clear" onclick="clearFilters()">Clear all</button>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">Open Opportunities</div>
+    <div class="result-count" id="resultCount">Showing all 12</div>
+  </div>
+  <div class="listings-grid" id="listingsGrid"></div>
+</div>
+</div>
+
+<!-- ══════════ EVENTS PAGE ══════════ -->
+<div class="page" id="events-page">
+<div class="main">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div class="section-title" style="font-size:1.6rem;">Upcoming Events</div>
+      <div class="section-sub">One-time opportunities, service days, and community events from Waco organizations.</div>
+    </div>
+    <button class="submit-event-btn" onclick="openModal('submitEventModal')">+ Submit Your Event</button>
+  </div>
+  <div class="events-grid" id="eventsGrid"></div>
+</div>
+</div>
+
+<!-- ══════════ DIRECTORY PAGE ══════════ -->
+<div class="page" id="directory-page">
+<div class="main">
+  <div style="margin-bottom:22px;">
+    <div class="section-title" style="font-size:1.6rem;">Waco Resource Directory</div>
+    <div class="section-sub" style="margin-top:4px;">47 organizations across health, housing, food, legal, and social services in the Waco area.</div>
+  </div>
+  <div class="dir-search-bar">
+    <div class="filter-group" style="flex:2;">
+      <label>Search</label>
+      <input type="text" id="dirSearch" placeholder="Search by name, service, or category..." oninput="renderDirectory()">
+    </div>
+    <div class="filter-group">
+      <label>Category</label>
+      <select id="dirCat" onchange="renderDirectory()">
+        <option value="">All Categories</option>
+        <option>Medical</option>
+        <option>Mental Health</option>
+        <option>Food Assistance</option>
+        <option>Housing & Emergency</option>
+        <option>Legal Assistance</option>
+        <option>Pregnancy & Family</option>
+        <option>Crisis Support</option>
+        <option>Social Services</option>
+        <option>Immigration Services</option>
+        <option>Addiction Recovery</option>
+        <option>Public Health</option>
+        <option>Youth Services</option>
+        <option>Education</option>
+        <option>Employment</option>
+        <option>Government Assistance</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Language</label>
+      <select id="dirLang" onchange="renderDirectory()">
+        <option value="">Any</option>
+        <option value="spanish">Spanish Available</option>
+        <option value="english">English Only</option>
+      </select>
+    </div>
+  </div>
+  <div class="dir-grid" id="dirGrid"></div>
+</div>
+</div>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Student Signup -->
+<div class="modal-overlay" id="studentSignupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('studentSignupModal')">✕</button>
+    <h2>Create Your Account</h2>
+    <p class="modal-sub">Join to track your hours and get notified about new openings.</p>
+    <div class="form-group"><label>Full Name</label><input type="text" id="su-name" placeholder="Jane Smith"></div>
+    <div class="form-group"><label>Baylor Email</label><input type="email" id="su-email" placeholder="jane_smith1@baylor.edu"></div>
+    <div class="form-group"><label>Year</label>
+      <select id="su-year"><option value="">Select year</option><option>Freshman</option><option>Sophomore</option><option>Junior</option><option>Senior</option><option>Transfer Student</option></select>
+    </div>
+    <div class="form-group"><label>Area of Interest</label>
+      <select id="su-interest"><option value="">What draws you to medicine?</option><option>Pediatrics</option><option>Maternal / Women's Health</option><option>Mental Health</option><option>Community / Public Health</option><option>Emergency Medicine</option><option>Research</option><option>Refugee & Underserved Care</option><option>Geriatrics</option><option>Substance Recovery</option><option>Not sure yet</option></select>
+    </div>
+    <div class="form-group"><label>Bilingual?</label>
+      <select id="su-bilingual"><option value="">Select</option><option>Yes — Spanish</option><option>Yes — Other</option><option>No</option></select>
+    </div>
+    <button class="form-submit" onclick="submitStudentSignup()">Create Account</button>
+  </div>
+</div>
+
+<!-- List Org -->
+<div class="modal-overlay" id="listOrgModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('listOrgModal')">✕</button>
+    <h2>List Your Organization</h2>
+    <p class="modal-sub">Submit your org to be featured. A student liaison will review and approve within a few days.</p>
+    <div class="form-group"><label>Organization Name</label><input type="text" id="lo-name" placeholder="e.g. CareNet Waco"></div>
+    <div class="form-group"><label>Contact Email</label><input type="email" id="lo-email" placeholder="coordinator@org.org"></div>
+    <div class="form-group"><label>Website</label><input type="url" id="lo-website" placeholder="https://..."></div>
+    <div class="form-group"><label>Type of Opportunity</label>
+      <select id="lo-type"><option value="">Select type</option><option>Clinical</option><option>Non-Clinical</option><option>Research</option><option>Mental Health</option><option>Community Service</option></select>
+    </div>
+    <div class="form-group"><label>Bilingual / Spanish-language support?</label>
+      <select id="lo-bilingual"><option value="">Select</option><option>Yes</option><option>No</option><option>Helpful but not required</option></select>
+    </div>
+    <div class="form-group"><label>Brief Description</label><textarea id="lo-desc" placeholder="What will volunteers be doing? Who do you serve?"></textarea></div>
+    <div class="form-group"><label>Volunteer Spots Available</label><input type="number" id="lo-spots" placeholder="e.g. 10" min="1"></div>
+    <div class="form-group"><label>Time Commitment</label>
+      <select id="lo-commit"><option value="">Select</option><option>Weekly (recurring)</option><option>Monthly (recurring)</option><option>One-Time Event</option><option>Flexible</option></select>
+    </div>
+    <button class="form-submit" onclick="submitOrgListing()">Submit for Review</button>
+  </div>
+</div>
+
+<!-- Submit Event -->
+<div class="modal-overlay" id="submitEventModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('submitEventModal')">✕</button>
+    <h2>Submit a One-Time Event</h2>
+    <p class="modal-sub">Got a service day, 5K, health fair, or other event? Get it in front of Baylor students.</p>
+    <div class="form-group"><label>Organization Name</label><input type="text" id="ev-org" placeholder="e.g. La Puerta Ministries"></div>
+    <div class="form-group"><label>Event Name</label><input type="text" id="ev-name" placeholder="e.g. La Puerta Community 5K"></div>
+    <div class="form-group"><label>Event Date</label><input type="date" id="ev-date"></div>
+    <div class="form-group"><label>Time</label><input type="text" id="ev-time" placeholder="e.g. 7:00 AM – 11:00 AM"></div>
+    <div class="form-group"><label>Location</label><input type="text" id="ev-location" placeholder="Address or area"></div>
+    <div class="form-group"><label>Description</label><textarea id="ev-desc" placeholder="What will volunteers do? What's the cause?"></textarea></div>
+    <div class="form-group"><label>Registration / Info Link</label><input type="url" id="ev-link" placeholder="https://..."></div>
+    <div class="form-group"><label>Contact Email</label><input type="email" id="ev-contact" placeholder="contact@org.org"></div>
+    <button class="form-submit" onclick="submitEvent()">Submit Event</button>
+  </div>
+</div>
+
+<!-- Opportunity Detail -->
+<div class="modal-overlay" id="oppDetailModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('oppDetailModal')">✕</button>
+    <div id="oppDetailContent"></div>
+  </div>
+</div>
+
+<!-- Success -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal" style="text-align:center">
+    <button class="modal-close" onclick="closeModal('successModal')">✕</button>
+    <div class="success-icon" id="successIcon">🎉</div>
+    <div class="success-title" id="successTitle">Done!</div>
+    <div class="success-sub" id="successSub"></div>
+    <button class="form-submit" onclick="closeModal('successModal')" style="max-width:180px;margin:0 auto;">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── OPPORTUNITIES DATA ──────────────────────────────────────────────────────
+const opportunities = [
+  { id:1, org:"CareNet Waco", title:"Pregnancy Resource Center Assistant", type:"nonclinical", niches:["maternal","poverty"], bilingual:true, desc:"Assist expectant mothers with resources, emotional support, and navigating prenatal care options. No clinical experience required — a meaningful entry point into maternal health.", commitment:"weekly", commitLabel:"3 hrs/week", location:"Waco, TX", spotsTotal:8, spotsFilled:6, tags:["Maternal Health","Counseling Support","Beginner Friendly"], url:"https://carenetwaco.org" },
+  { id:2, org:"Waco Diaper Initiative", title:"Diaper Bank Distribution Volunteer", type:"community", niches:["poverty","pediatric"], bilingual:false, desc:"Sort, package, and distribute diapers to low-income families. One of the smaller, high-impact initiatives in the community — every shift makes a direct difference.", commitment:"monthly", commitLabel:"1 Saturday/month", location:"Waco, TX", spotsTotal:15, spotsFilled:7, tags:["Infant Health","Poverty Relief","Community"], url:"https://wacofamilymedicine.org" },
+  { id:3, org:"La Puerta Ministries", title:"Health Navigation for Immigrant Families", type:"nonclinical", niches:["refugee","poverty"], bilingual:true, desc:"Help Spanish-speaking immigrant families understand healthcare options and connect to local services. Bilingual volunteers especially welcome — but not required.", commitment:"weekly", commitLabel:"2–4 hrs/week", location:"Waco, TX", spotsTotal:6, spotsFilled:2, tags:["Refugee Care","Health Literacy","Bilingual Welcomed"], url:"https://caritas-waco.org" },
+  { id:4, org:"Mission Waco", title:"Free Medical Clinic Intake Support", type:"clinical", niches:["poverty","elderly"], bilingual:true, desc:"Assist at Mission Waco's free medical clinic — checking patients in, taking vitals, and supporting clinical staff. Great for students building their first clinical hours.", commitment:"weekly", commitLabel:"4 hrs/week", location:"Waco, TX", spotsTotal:10, spotsFilled:10, tags:["Clinical Hours","Free Clinic","Underserved"], url:"https://missionwaco.org" },
+  { id:5, org:"Stepping Stone", title:"Substance Recovery Companion", type:"mentalhealth", niches:["substance","mentalhealth"], bilingual:false, desc:"Provide peer support to adults in recovery. A brief orientation is required before starting. Powerful for students interested in addiction medicine or psychiatry.", commitment:"weekly", commitLabel:"2 hrs/week", location:"Waco, TX", spotsTotal:8, spotsFilled:3, tags:["Addiction Medicine","Mental Health","Vetted Placement"], url:"https://cenikor.org" },
+  { id:6, org:"Heart of Texas Behavioral Health", title:"Mental Health Outreach Assistant", type:"mentalhealth", niches:["mentalhealth","poverty"], bilingual:true, desc:"Support community mental health workers in outreach events across McLennan County. Great exposure to public mental health infrastructure.", commitment:"monthly", commitLabel:"2–3 events/month", location:"McLennan County", spotsTotal:12, spotsFilled:5, tags:["Psychiatry","Public Health","Outreach"], url:"https://hotbhn.org" },
+  { id:7, org:"Baylor Scott & White", title:"Clinical Research Data Assistant", type:"research", niches:["research"], bilingual:false, desc:"Assist BSW research staff with data entry, patient chart review, and literature searches. Ideal for students considering MD-PhD or research careers.", commitment:"weekly", commitLabel:"5 hrs/week", location:"Temple, TX", spotsTotal:4, spotsFilled:1, tags:["Research","Data","MD-PhD Track"], url:"https://bswhealth.com" },
+  { id:8, org:"Compassion Waco", title:"Elderly Companion Visits", type:"nonclinical", niches:["elderly","mentalhealth"], bilingual:false, desc:"Visit isolated elderly residents in assisted living facilities. Combats loneliness and gives students exposure to geriatric populations. Flexible and welcoming.", commitment:"weekly", commitLabel:"1 hr/week", location:"Waco, TX", spotsTotal:20, spotsFilled:8, tags:["Geriatrics","Social Determinants","Beginner Friendly"], url:"https://compassionwaco.com" },
+  { id:9, org:"Waco Family Medicine", title:"Community Health Fair Support", type:"clinical", niches:["poverty","pediatric","maternal"], bilingual:true, desc:"Staff health fair booths doing screenings, BP checks, and connecting families to primary care. Real hands-on experience at community events.", commitment:"oneoff", commitLabel:"One-Time Events", location:"Waco, TX", spotsTotal:25, spotsFilled:14, tags:["Screenings","Primary Care","Family Medicine"], url:"https://wacofamilymedicine.org" },
+  { id:10, org:"Prosper Waco", title:"Social Determinants of Health Survey", type:"research", niches:["poverty","refugee"], bilingual:true, desc:"Conduct community surveys on food security, housing, and healthcare access in underserved Waco neighborhoods. Great intro to public health research.", commitment:"oneoff", commitLabel:"Flexible, project-based", location:"Waco, TX", spotsTotal:10, spotsFilled:4, tags:["Public Health","Research","SDOH"], url:"https://prosperwaco.org" },
+  { id:11, org:"Children's Miracle Network", title:"Pediatric Unit Play & Support", type:"clinical", niches:["pediatric"], bilingual:false, desc:"Spend time with pediatric patients — reading, playing, and providing emotional comfort. Vetted placement that exposes you to pediatric medicine in a deeply human way.", commitment:"weekly", commitLabel:"2 hrs/week", location:"Waco, TX", spotsTotal:6, spotsFilled:5, tags:["Pediatrics","Hospital","Vetted Placement"], url:"https://bswhealth.com" },
+  { id:12, org:"Central Texas Food Bank", title:"Nutrition Education Assistant", type:"nonclinical", niches:["poverty","elderly"], bilingual:true, desc:"Facilitate nutrition workshops for low-income families and elderly residents. A unique niche in food-as-medicine and preventive health education.", commitment:"monthly", commitLabel:"2x/month", location:"Waco, TX", spotsTotal:8, spotsFilled:2, tags:["Nutrition","Preventive Health","Education"], url:"https://centraltexasfoodbank.org" },
+];
+
+// ─── EVENTS DATA ─────────────────────────────────────────────────────────────
+const events = [
+  { id:1, org:"La Puerta Ministries", title:"La Puerta Community 5K", date:"2026-04-26", time:"7:00 AM – 11:00 AM", location:"Cameron Park, Waco TX", desc:"Run or volunteer at La Puerta's annual 5K fundraiser supporting immigrant families in Waco. Volunteers help with registration, water stations, and finish line support.", url:"https://caritas-waco.org", contact:"outreach@lapuerta.org", spots:30, filled:12 },
+  { id:2, org:"Waco Family Medicine", title:"Spring Health Fair", date:"2026-05-10", time:"9:00 AM – 2:00 PM", location:"1600 Providence Dr, Waco TX", desc:"Staff booths at the annual Waco Family Medicine spring health fair — blood pressure checks, diabetes screenings, and resource navigation for underinsured families.", url:"https://wacofamilymedicine.org", contact:"events@wacofamilymedicine.org", spots:20, filled:7 },
+  { id:3, org:"Mission Waco", title:"Market Day Volunteering", date:"2026-05-17", time:"8:00 AM – 12:00 PM", location:"1226 Washington Ave, Waco TX", desc:"Help set up and run Mission Waco's monthly community market — sorting donations, assisting shoppers, and building community with local residents.", url:"https://missionwaco.org", contact:"volunteer@missionwaco.org", spots:15, filled:4 },
+];
+
+// ─── DIRECTORY DATA (from spreadsheet) ───────────────────────────────────────
+const directory = [
+  { name:"Care Net Waco", address:"7110 Sanger Ave", phone:"254-772-6175", hours:"Mon-Fri 8AM-5PM", cost:"Free", languages:"English/Spanish", service:"Pregnancy testing, options counseling, material support", category:"Pregnancy & Family", website:"https://carenetwaco.org", notes:"Text RN (254) 452-5250" },
+  { name:"Hope Pregnancy Center", address:"1919 N 18th St", phone:"254-757-5500", hours:"Mon-Fri 10AM-5PM", cost:"Free", languages:"English/Spanish", service:"Pregnancy testing and ultrasounds", category:"Pregnancy & Family", website:"https://hpcwaco.org", notes:"Counseling services available" },
+  { name:"Waco Family Medicine", address:"1600 Providence Dr", phone:"254-313-4200", hours:"Mon-Fri 8AM-5PM", cost:"Sliding scale", languages:"English/Spanish", service:"Primary care", category:"Medical", website:"https://wacofamilymedicine.org", notes:"FQHC clinic" },
+  { name:"Waco Family Medicine Dental", address:"1600 Providence Dr", phone:"254-313-4444", hours:"Mon-Fri 8AM-5PM", cost:"Sliding scale", languages:"English/Spanish", service:"Dental services", category:"Medical", website:"https://wacofamilymedicine.org", notes:"Dental clinic" },
+  { name:"Mission Waco Medical Clinic", address:"1226 Washington Ave", phone:"254-753-4900", hours:"Tue & Thu 4:30PM-7PM", cost:"Free", languages:"English/Spanish", service:"Adult medical care", category:"Medical", website:"https://missionwaco.org", notes:"Sign in begins 4:30PM — walk-in" },
+  { name:"Waco-McLennan County Public Health District", address:"225 W Waco Dr", phone:"254-750-5450", hours:"Mon-Fri 8AM-4:30PM", cost:"Free", languages:"English/Spanish", service:"Immunizations and public health", category:"Public Health", website:"https://waco-texas.com/health", notes:"Vaccinations and testing" },
+  { name:"Ascension Providence", address:"6901 Medical Pkwy", phone:"254-751-4000", hours:"24 hours", cost:"Insurance dependent", languages:"English/Spanish", service:"Hospital & ER", category:"Medical", website:"https://healthcare.ascension.org", notes:"Major hospital" },
+  { name:"Baylor Scott & White Hillcrest", address:"100 Hillcrest Medical Blvd", phone:"254-202-2000", hours:"24 hours", cost:"Insurance dependent", languages:"English/Spanish", service:"Hospital & ER", category:"Medical", website:"https://bswhealth.com", notes:"Regional hospital" },
+  { name:"Heart of Texas Behavioral Health Network", address:"110 S 12th St", phone:"254-752-3451", hours:"Mon-Fri 8AM-5PM", cost:"Sliding scale", languages:"English/Spanish", service:"Mental health services", category:"Mental Health", website:"https://hotbhn.org", notes:"24hr crisis line available" },
+  { name:"The Center for Children and Families", address:"215 Mary Ave", phone:"254-772-8055", hours:"Mon-Fri 8AM-7PM", cost:"Varies", languages:"English", service:"Child & family counseling", category:"Mental Health", website:"https://centerforchildrenandfamilies.org", notes:"Outpatient counseling" },
+  { name:"STARRY Counseling", address:"2323 Columbus Ave Suite A", phone:"254-399-6552", hours:"Mon-Fri 9AM-5PM", cost:"Free", languages:"English/Spanish", service:"Family counseling", category:"Mental Health", website:"https://starry.org", notes:"No-cost counseling (FAYS program)" },
+  { name:"Family Abuse Center", address:"500 Franklin Ave", phone:"254-772-8999", hours:"24 hours", cost:"Free", languages:"English/Spanish", service:"Domestic violence shelter", category:"Crisis Support", website:"https://familyabusecenter.org", notes:"Emergency shelter and advocacy" },
+  { name:"Caritas of Waco", address:"300 S 15th St", phone:"254-753-4593", hours:"Mon-Fri 8AM-4PM", cost:"Free", languages:"English/Spanish", service:"Food pantry", category:"Food Assistance", website:"https://caritas-waco.org", notes:"Rent & job assistance available" },
+  { name:"Central Texas Food Bank", address:"Waco, TX", phone:"512-282-2111", hours:"Varies", cost:"Free", languages:"English/Spanish", service:"Food distribution", category:"Food Assistance", website:"https://centraltexasfoodbank.org", notes:"Mobile pantries — schedule varies" },
+  { name:"Meals on Wheels Waco", address:"501 W Waco Dr", phone:"254-752-0316", hours:"Mon-Fri 8AM-4PM", cost:"Donation based", languages:"English", service:"Meal delivery", category:"Food Assistance", website:"https://mowwaco.org", notes:"Home delivered meals for seniors" },
+  { name:"Salvation Army Waco", address:"4721 W Waco Dr", phone:"254-756-7271", hours:"Mon-Fri 9AM-4PM", cost:"Free/program dependent", languages:"English/Spanish", service:"Emergency assistance", category:"Housing & Emergency", website:"https://salvationarmytexas.org", notes:"Utility and financial help" },
+  { name:"Waco Housing Authority", address:"4400 Cobbs Dr", phone:"254-752-0324", hours:"Mon-Fri 8AM-5PM", cost:"Income based", languages:"English/Spanish", service:"Public housing", category:"Housing & Emergency", website:"https://wacopha.org", notes:"Housing vouchers and public housing" },
+  { name:"Compassion Waco", address:"1424 Colcord Ave", phone:"254-754-1875", hours:"Mon-Fri 9AM-5PM", cost:"Free", languages:"English/Spanish", service:"Transitional housing & community programs", category:"Housing & Emergency", website:"https://compassionwaco.com", notes:"Family transitional housing" },
+  { name:"My Brother's Keeper", address:"2201 Clay Ave", phone:"254-752-3343", hours:"Mon-Fri 9AM-4PM", cost:"Free", languages:"English/Spanish", service:"Food & clothing", category:"Food Assistance", website:"https://missionwaco.org", notes:"Church outreach via Mission Waco" },
+  { name:"Esther's Closet", address:"4525 Bosque Blvd", phone:"254-753-4900", hours:"Varies", cost:"Free", languages:"English/Spanish", service:"Clothing assistance", category:"Social Services", website:"", notes:"Professional clothing — Mission Waco program" },
+  { name:"Lone Star Legal Aid", address:"Waco, TX", phone:"800-733-8394", hours:"Mon-Fri 8AM-5PM", cost:"Free for eligible", languages:"English/Spanish", service:"Civil legal aid", category:"Legal Assistance", website:"https://lonestarlegal.org", notes:"Housing & benefits cases" },
+  { name:"Greater Waco Legal Services", address:"600 Austin Ave Suite 102", phone:"254-756-7944", hours:"Mon-Fri 8AM-5PM", cost:"Free/low cost", languages:"English/Spanish", service:"Legal aid", category:"Legal Assistance", website:"https://gwacolegal.org", notes:"Housing and family law" },
+  { name:"Baylor Law Clinic", address:"1114 S University Parks Dr", phone:"254-710-4244", hours:"Mon-Fri 8AM-5PM", cost:"Free", languages:"English/Spanish", service:"Legal services", category:"Legal Assistance", website:"https://law.baylor.edu", notes:"Law students supervised by attorneys" },
+  { name:"McLennan County Indigent Health Care", address:"501 Washington Ave", phone:"254-757-5183", hours:"Mon-Fri 8AM-5PM", cost:"Low cost county assistance", languages:"English/Spanish", service:"Medical cost assistance", category:"Medical", website:"https://mclennan.gov", notes:"Helps pay medical bills for uninsured county residents" },
+  { name:"American Red Cross Waco", address:"4224 Cobbs Dr", phone:"254-756-5271", hours:"Mon-Fri 8AM-5PM", cost:"Free disaster relief", languages:"English/Spanish", service:"Emergency assistance", category:"Crisis Support", website:"https://redcross.org", notes:"Disaster recovery help" },
+  { name:"Goodall-Witcher Clinic", address:"Waco, TX", phone:"254-826-3461", hours:"Mon-Fri 8AM-5PM", cost:"Sliding scale", languages:"English/Spanish", service:"Primary care services", category:"Medical", website:"https://gwhealthcare.org", notes:"Outreach medical care" },
+  { name:"Cenikor Waco", address:"2210 Washington Ave", phone:"254-776-7366", hours:"24 hours", cost:"Insurance/sliding scale", languages:"English/Spanish", service:"Addiction recovery services", category:"Addiction Recovery", website:"https://cenikor.org", notes:"Inpatient and outpatient programs" },
+  { name:"La Puerta Ministries", address:"300 S 15th St", phone:"254-753-4593", hours:"Varies", cost:"Free", languages:"English/Spanish", service:"Immigration assistance", category:"Immigration Services", website:"https://caritas-waco.org", notes:"Legal help and advocacy" },
+  { name:"WIC McLennan County", address:"225 W Waco Dr", phone:"254-750-5468", hours:"Mon-Fri 8AM-5PM", cost:"Free", languages:"English/Spanish", service:"WIC nutrition program", category:"Food Assistance", website:"https://texaswic.org", notes:"Nutrition benefits for pregnant women & children" },
+  { name:"Waco ISD Child Nutrition", address:"501 Franklin Ave", phone:"254-755-9473", hours:"School hours", cost:"Free/reduced lunch", languages:"English/Spanish", service:"School meal programs", category:"Food Assistance", website:"https://wacoisd.org", notes:"Breakfast and lunch programs" },
+  { name:"Prosper Waco", address:"900 Austin Ave", phone:"254-757-5022", hours:"Mon-Fri 9AM-5PM", cost:"Free", languages:"English", service:"Community economic programs", category:"Social Services", website:"https://prosperwaco.org", notes:"Education and workforce programs" },
+  { name:"Church of the Open Door", address:"900 N Loop 340", phone:"254-799-2656", hours:"Varies", cost:"Free", languages:"English/Spanish", service:"Food and support services", category:"Food Assistance", website:"https://tcotod.org", notes:"Food pantry services" },
+  { name:"Mission Waco 12:2 Renewal", address:"1315 N 15th St", phone:"254-753-4900", hours:"Varies", cost:"Program dependent", languages:"English/Spanish", service:"Job training", category:"Social Services", website:"https://missionwaco.org", notes:"Employment support" },
+  { name:"Oceans Healthcare", address:"3610 Herring Ave", phone:"254-848-2000", hours:"Mon-Fri 8AM-5PM", cost:"Insurance dependent", languages:"English/Spanish", service:"Geriatric mental health", category:"Mental Health", website:"https://oceanshealthcare.com", notes:"Specialized psychiatric care for seniors" },
+  { name:"Baylor Psychology Clinic", address:"Waco, TX", phone:"254-710-2067", hours:"Mon-Fri 9AM-5PM", cost:"Reduced cost", languages:"English", service:"Psychology counseling", category:"Mental Health", website:"https://baylor.edu", notes:"Psychology training clinic" },
+  { name:"NAMI Waco", address:"Waco, TX", phone:"254-297-5477", hours:"Varies", cost:"Free", languages:"English", service:"Mental health support groups", category:"Mental Health", website:"https://namiwaco.org", notes:"Peer support groups" },
+  { name:"Advocacy Center for Crime Victims", address:"2323 Columbus Ave", phone:"254-752-9330", hours:"24 hours", cost:"Free", languages:"English/Spanish", service:"Victim advocacy", category:"Crisis Support", website:"https://advocacycntr.org", notes:"Counseling and legal support" },
+  { name:"Mission Waco Express Care", address:"1226 Washington Ave", phone:"254-753-4900", hours:"Varies", cost:"Free", languages:"English/Spanish", service:"Urgent care services", category:"Medical", website:"https://missionwaco.org", notes:"Low cost care for uninsured" },
+  { name:"Clinica Hispana Waco", address:"2300 Franklin Ave", phone:"254-732-3030", hours:"Mon-Sat 9AM-6PM", cost:"Low cost", languages:"Spanish", service:"Primary care clinic", category:"Medical", website:"", notes:"Spanish-speaking clinic" },
+  { name:"The Salvation Army Shelter Waco", address:"300 Webster Ave", phone:"254-756-7271", hours:"24 hours", cost:"Free", languages:"English/Spanish", service:"Emergency shelter", category:"Housing & Emergency", website:"https://salvationarmytexas.org", notes:"Homeless services" },
+  { name:"The Hangar Youth Center", address:"Waco, TX", phone:"N/A", hours:"Varies", cost:"Free", languages:"English", service:"Youth programs", category:"Youth Services", website:"", notes:"Community youth center" },
+  { name:"EOAC", address:"500 Franklin Ave", phone:"254-753-0331", hours:"Mon-Fri 8AM-5PM", cost:"Free/program dependent", languages:"English/Spanish", service:"Community action agency", category:"Government Assistance", website:"https://eoacwaco.org", notes:"Energy and housing assistance" },
+  { name:"Baylor Law Veterans Clinic", address:"1114 S University Parks Dr", phone:"254-710-4244", hours:"Mon-Fri 8AM-5PM", cost:"Free", languages:"English", service:"Legal help for veterans", category:"Legal Assistance", website:"https://law.baylor.edu", notes:"Veterans benefits" },
+  { name:"Texas Workforce Solutions Waco", address:"1416 S New Rd", phone:"254-296-5300", hours:"Mon-Fri 8AM-5PM", cost:"Free", languages:"English/Spanish", service:"Employment services", category:"Employment", website:"https://workforcesolutions.com", notes:"Job placement assistance" },
+  { name:"McLennan Community College Workforce Training", address:"1400 College Dr", phone:"254-299-8888", hours:"Mon-Fri 8AM-5PM", cost:"Tuition based", languages:"English", service:"Job training programs", category:"Education", website:"https://mclennan.edu", notes:"Workforce development" },
+  { name:"Habitat for Humanity Waco", address:"220 N 11th St", phone:"254-756-7575", hours:"Mon-Fri 9AM-5PM", cost:"Income based", languages:"English/Spanish", service:"Housing assistance", category:"Housing & Emergency", website:"https://wacohabitat.org", notes:"Home ownership programs" },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let signups = JSON.parse(localStorage.getItem('vh_signups')||'{}');
+let activeNiche = '';
+let activeClinical = 'all';
+let localEvents = JSON.parse(localStorage.getItem('vh_events')||'[]');
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
+function hasSignedUp(id){ return !!signups[id]; }
+function canSignUpAgain(id){ if(!signups[id]) return true; return (Date.now()-signups[id].signupTime) >= COOLDOWN_MS; }
+function spotsLeft(o){ return o.spotsTotal - o.spotsFilled; }
+
+// ─── PAGE NAV ─────────────────────────────────────────────────────────────────
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const pages = {opportunities:'opps-page', events:'events-page', directory:'directory-page'};
+  document.getElementById(pages[name]).classList.add('active');
+  document.querySelectorAll('.tab-btn')[['opportunities','events','directory'].indexOf(name)].classList.add('active');
+  if(name==='events') renderEvents();
+  if(name==='directory') renderDirectory();
+}
+
+// ─── FILTERS ─────────────────────────────────────────────────────────────────
+function setClinical(val){
+  activeClinical = val;
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('toggle-'+val).classList.add('active');
+  applyFilters();
+}
+function setNiche(el, niche){
+  activeNiche = niche;
+  document.querySelectorAll('.niche-tag').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+function filterBilingual(){
+  showPage('opportunities');
+  activeNiche = 'bilingual';
+  document.querySelectorAll('.niche-tag').forEach(t=>{ t.classList.toggle('active', t.textContent.includes('Bilingual')); });
+  applyFilters();
+}
+function applyFilters(){
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const commit = document.getElementById('commitFilter').value;
+  let results = opportunities.filter(o=>{
+    const matchSearch = !search || o.title.toLowerCase().includes(search)||o.org.toLowerCase().includes(search)||o.desc.toLowerCase().includes(search)||o.tags.some(t=>t.toLowerCase().includes(search));
+    const matchCommit = !commit || o.commitment===commit;
+    const matchNiche = !activeNiche || (activeNiche==='bilingual' ? o.bilingual : o.niches.includes(activeNiche));
+    const matchClinical = activeClinical==='all' || (activeClinical==='clinical' ? o.type==='clinical'||o.type==='research' : o.type==='nonclinical'||o.type==='community'||o.type==='mentalhealth');
+    return matchSearch && matchCommit && matchNiche && matchClinical;
+  });
+  renderAll(results);
+}
+function clearFilters(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('commitFilter').value='';
+  activeNiche=''; activeClinical='all';
+  document.querySelectorAll('.niche-tag').forEach(t=>t.classList.toggle('active', t.id==='niche-all'));
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.toggle('active', b.id==='toggle-all'));
+  applyFilters();
+}
+
+// ─── RENDER CARDS ─────────────────────────────────────────────────────────────
+function getAccent(t){ return {clinical:'accent-clinical',nonclinical:'accent-nonclinical',research:'accent-research',mentalhealth:'accent-mentalhealth',community:'accent-community'}[t]||'accent-community'; }
+function getBadgeC(t){ return {clinical:'badge-clinical',nonclinical:'badge-nonclinical',research:'badge-research',mentalhealth:'badge-mentalhealth',community:'badge-community'}[t]||'badge-community'; }
+function getBadgeL(t){ return {clinical:'Clinical',nonclinical:'Non-Clinical',research:'Research',mentalhealth:'Mental Health',community:'Community'}[t]||t; }
+function commitIcon(c){ return c==='weekly'?'🔁':c==='monthly'?'📅':'⭐'; }
+
+function renderCard(o){
+  const left=spotsLeft(o), full=left<=0, su=hasSignedUp(o.id), canRedo=canSignUpAgain(o.id);
+  const pct=Math.min(100,(o.spotsFilled/o.spotsTotal)*100);
+  const fillClass=pct>=100?'full':pct>=75?'almost':'';
+  let btnTxt='Reserve a Spot', btnCls='available';
+  if(full&&!su){btnTxt='Fully Booked';btnCls='full';}
+  if(su&&!canRedo){btnTxt='✓ Signed Up (24hr cooldown)';btnCls='signed-up';}
+  return `<div class="card">
+    <div class="card-accent ${getAccent(o.type)}"></div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="org-name">${o.org}</div>
+        <div class="card-badges">
+          <div class="card-badge ${getBadgeC(o.type)}">${getBadgeL(o.type)}</div>
+          ${o.bilingual?'<div class="card-badge badge-bilingual">🌎 Bilingual</div>':''}
+        </div>
+      </div>
+      <div class="card-title">${o.title}</div>
+      <div class="card-desc">${o.desc}</div>
+      <div class="card-meta">
+        <div class="meta-item">${commitIcon(o.commitment)} ${o.commitLabel}</div>
+        <div class="meta-item">📍 ${o.location}</div>
+      </div>
+      <div class="card-tags">${o.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>
+      <div class="spots-bar">
+        <div class="spots-label"><span>Spots filled</span><strong>${o.spotsFilled}/${o.spotsTotal}</strong></div>
+        <div class="progress-track"><div class="progress-fill ${fillClass}" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="signup-btn ${btnCls}" onclick="openOppDetail(${o.id})">${btnTxt}</button>
+    </div>
+  </div>`;
+}
+
+function renderAll(opps){
+  const g=document.getElementById('listingsGrid');
+  g.innerHTML = opps.length===0
+    ? `<div class="no-results"><div class="no-results-icon">🔍</div><h3>No matches found</h3><p>Try adjusting your filters.</p></div>`
+    : opps.map(renderCard).join('');
+  document.getElementById('resultCount').textContent=`Showing ${opps.length} opportunit${opps.length===1?'y':'ies'}`;
+}
+
+// ─── OPP DETAIL MODAL ────────────────────────────────────────────────────────
+function openOppDetail(id){
+  const o=opportunities.find(x=>x.id===id);
+  const left=spotsLeft(o), full=left<=0, su=hasSignedUp(id), canRedo=canSignUpAgain(id);
+  let actionHtml='';
+  if(su && !canRedo){
+    const hrs=Math.ceil(COOLDOWN_MS/3600000-((Date.now()-signups[id].signupTime)/3600000));
+    actionHtml=`<div class="cooldown-note">⏳ You signed up recently. The 24-hour window prevents cancellation — if you need to cancel, email the org directly at <strong>${o.url.replace('https://','')}</strong>.</div>
+    <div class="cancel-policy">❌ <strong>Cancel policy:</strong> To cancel within 24 hours, you must email the organization directly. No-shows reflect poorly on Baylor students and may affect future access.</div>
+    <button class="form-submit" style="background:var(--cream-dark);color:var(--text-muted);cursor:not-allowed">✓ Already Signed Up — ${hrs}h cooldown remaining</button>`;
+  } else if(full){
+    actionHtml=`<button class="form-submit" style="background:var(--cream-dark);color:var(--text-muted);cursor:not-allowed">This opportunity is fully booked</button>`;
+  } else {
+    actionHtml=`<div class="redirect-note">✅ Clicking below will take you to <strong>${o.org}'s website</strong> to complete your sign-up directly with them — reducing admin load on the org.</div>
+    <div class="cancel-policy">❌ <strong>Cancel policy:</strong> Once you sign up, you cannot cancel through this site for 24 hours. If plans change, email the org directly.</div>
+    <div class="form-group"><label>Your Name (for our records)</label><input type="text" id="detail-name" placeholder="Jane Smith"></div>
+    <div class="form-group"><label>Baylor Email</label><input type="email" id="detail-email" placeholder="jane_smith1@baylor.edu"></div>
+    <button class="form-submit" onclick="submitAndRedirect(${id})">Sign Up → Go to ${o.org}'s Site</button>`;
+  }
+  document.getElementById('oppDetailContent').innerHTML=`
+    <div class="modal-detail-org">${o.org}</div>
+    <div class="modal-detail-title">${o.title}</div>
+    <div class="modal-detail-desc">${o.desc}</div>
+    <div class="modal-detail-meta">
+      <div class="modal-meta-row">⏱ <span><strong>Commitment:</strong> ${o.commitLabel}</span></div>
+      <div class="modal-meta-row">📍 <span><strong>Location:</strong> ${o.location}</span></div>
+      <div class="modal-meta-row">👥 <span><strong>Spots left:</strong> ${Math.max(0,left)}</span></div>
+      ${o.bilingual?'<div class="modal-meta-row">🌎 <span><strong>Bilingual:</strong> Spanish-language support available</span></div>':''}
+    </div>
+    <hr class="modal-divider">
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:14px;font-weight:600">Reserve Your Spot</p>
+    ${actionHtml}`;
+  openModal('oppDetailModal');
+}
+
+function submitAndRedirect(id){
+  const name=document.getElementById('detail-name')?.value.trim();
+  const email=document.getElementById('detail-email')?.value.trim();
+  if(!name||!email){showToast('Please fill in your name and email.');return;}
+  if(!email.includes('@')){showToast('Please enter a valid email.');return;}
+  const o=opportunities.find(x=>x.id===id);
+  o.spotsFilled=Math.min(o.spotsTotal,o.spotsFilled+1);
+  signups[id]={name,email,signupTime:Date.now()};
+  localStorage.setItem('vh_signups',JSON.stringify(signups));
+  closeModal('oppDetailModal');
+  // Open org website
+  window.open(o.url,'_blank');
+  showToast(`Taking you to ${o.org}'s site to complete sign-up!`);
+  applyFilters();
+}
+
+// ─── EVENTS ──────────────────────────────────────────────────────────────────
+function formatDate(ds){
+  const d=new Date(ds+'T12:00:00');
+  return { day:d.getDate(), month:d.toLocaleString('default',{month:'short'}), weekday:d.toLocaleString('default',{weekday:'long'}) };
+}
+
+function renderEvents(){
+  const allEvents=[...events,...localEvents];
+  const g=document.getElementById('eventsGrid');
+  if(allEvents.length===0){g.innerHTML=`<div class="no-results" style="grid-column:1/-1"><div class="no-results-icon">📅</div><h3>No events yet</h3><p>Submit your organization's event using the button above!</p></div>`;return;}
+  g.innerHTML=allEvents.map(ev=>{
+    const d=formatDate(ev.date);
+    const left=ev.spots-ev.filled;
+    return `<div class="event-card">
+      <div class="event-date-bar">
+        <div class="event-date-big">${d.day}</div>
+        <div class="event-date-info"><div class="month">${d.month} 2026</div><div class="weekday">${d.weekday}</div></div>
+      </div>
+      <div class="event-body">
+        <div class="event-org">${ev.org}</div>
+        <div class="event-title">${ev.title}</div>
+        <div class="event-desc">${ev.desc}</div>
+        <div class="event-meta">
+          <div class="event-meta-row">🕐 ${ev.time}</div>
+          <div class="event-meta-row">📍 ${ev.location}</div>
+          <div class="event-meta-row">👥 ${left} spots remaining</div>
+        </div>
+        <button class="event-register-btn" onclick="window.open('${ev.url||'#'}','_blank')">Register → Visit Org Site</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function submitEvent(){
+  const org=document.getElementById('ev-org').value.trim();
+  const name=document.getElementById('ev-name').value.trim();
+  const date=document.getElementById('ev-date').value;
+  const time=document.getElementById('ev-time').value.trim();
+  const loc=document.getElementById('ev-location').value.trim();
+  const desc=document.getElementById('ev-desc').value.trim();
+  const link=document.getElementById('ev-link').value.trim();
+  const contact=document.getElementById('ev-contact').value.trim();
+  if(!org||!name||!date){showToast('Please fill in org, event name, and date.');return;}
+  const newEv={id:Date.now(),org,title:name,date,time:time||'TBD',location:loc||'Waco, TX',desc:desc||'',url:link||'#',contact,spots:50,filled:0};
+  localEvents.push(newEv);
+  localStorage.setItem('vh_events',JSON.stringify(localEvents));
+  closeModal('submitEventModal');
+  showSuccess('📅','Event Submitted!',`"${name}" has been added to the events board. A student liaison will review it shortly.`);
+  if(document.getElementById('events-page').classList.contains('active')) renderEvents();
+}
+
+// ─── DIRECTORY ───────────────────────────────────────────────────────────────
+function getCatColor(cat){
+  const map={'Medical':'#e8f4ee','Mental Health':'#f8e8f4','Food Assistance':'#fdf4e3','Housing & Emergency':'#f4ede8','Legal Assistance':'#e8ecf8','Pregnancy & Family':'#fce8f4','Crisis Support':'#fce8e2','Immigration Services':'#e8f0ff','Addiction Recovery':'#ede8fc','Public Health':'#e8f4f8','Social Services':'#f4f8e8'};
+  return map[cat]||'#f0ebe0';
+}
+function renderDirectory(){
+  const search=document.getElementById('dirSearch').value.toLowerCase();
+  const cat=document.getElementById('dirCat').value;
+  const lang=document.getElementById('dirLang').value;
+  let res=directory.filter(d=>{
+    const matchS=!search||d.name.toLowerCase().includes(search)||d.service.toLowerCase().includes(search)||d.category.toLowerCase().includes(search)||d.notes.toLowerCase().includes(search);
+    const matchC=!cat||d.category===cat;
+    const matchL=!lang||(lang==='spanish'?d.languages.toLowerCase().includes('spanish'):d.languages.toLowerCase()==='english');
+    return matchS&&matchC&&matchL;
+  });
+  const g=document.getElementById('dirGrid');
+  if(res.length===0){g.innerHTML=`<div class="no-results" style="grid-column:1/-1"><div class="no-results-icon">🔍</div><h3>No results</h3><p>Try a different search or category.</p></div>`;return;}
+  g.innerHTML=res.map(d=>`<div class="dir-card">
+    <div class="dir-card-top">
+      <div class="dir-card-name">${d.name}</div>
+      <div class="dir-cat-badge" style="background:${getCatColor(d.category)}">${d.category}</div>
+    </div>
+    <div class="dir-detail">📍 ${d.address}</div>
+    <div class="dir-detail">📞 ${d.phone}</div>
+    <div class="dir-detail">🕐 ${d.hours}</div>
+    <div class="dir-detail">💰 ${d.cost}</div>
+    <div class="dir-detail">🌐 ${d.website?`<a href="${d.website}" target="_blank">${d.website.replace('https://','')}</a>`:'—'}</div>
+    ${d.notes?`<div class="dir-detail" style="color:#4a6a5a;font-style:italic">💬 ${d.notes}</div>`:''}
+    <div class="dir-badges">
+      ${d.languages.includes('Spanish')?'<span class="card-badge badge-bilingual">🌎 Spanish</span>':''}
+      ${d.languages==='Spanish'?'<span class="card-badge" style="background:#fce8f4;color:#6b1a4a">Spanish Only</span>':''}
+    </div>
+  </div>`).join('');
+}
+
+// ─── MODALS ───────────────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+
+function showSuccess(icon,title,sub){
+  document.getElementById('successIcon').textContent=icon;
+  document.getElementById('successTitle').textContent=title;
+  document.getElementById('successSub').textContent=sub;
+  openModal('successModal');
+}
+
+function submitStudentSignup(){
+  const name=document.getElementById('su-name').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  if(!name||!email){showToast('Please fill in your name and email.');return;}
+  closeModal('studentSignupModal');
+  showSuccess('🌿','Welcome to the Hub!',`You're in, ${name}! We'll send updates about new opportunities to ${email}.`);
+}
+
+function submitOrgListing(){
+  const name=document.getElementById('lo-name').value.trim();
+  const email=document.getElementById('lo-email').value.trim();
+  if(!name||!email){showToast('Please fill in your org name and email.');return;}
+  closeModal('listOrgModal');
+  showSuccess('📋','Submission Received!',`Thanks for submitting ${name}! Our student liaison committee will review your listing and reach out to ${email} within a few days.`);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+applyFilters();
+</script>
+</body>
+</html>
